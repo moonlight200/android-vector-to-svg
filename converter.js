@@ -1,11 +1,13 @@
 var Converter = (function() {
 	const colorRegex = /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
+	const svgNamespace = "http://www.w3.org/2000/svg";
 
 	function convert(vdIn) {
 		var parsed = _parseVd(vdIn);
 		console.debug("parsed", parsed);
+		var svgDoc = _createSvg(parsed);
 
-		return "converted";
+		return svgDoc;
 	}
 
 	function _parseVd(vdIn) {
@@ -207,6 +209,39 @@ var Converter = (function() {
 		}
 
 		return clipPath;
+	}
+
+	function _createSvg(vectorData) {
+		var svgDoc = document.implementation.createDocument(this.svgNamespace, "svg", null);
+
+		// Add attributes
+		var svgElem = svgDoc.documentElement;
+		svgElem.setAttribute("width", vectorData.width);
+		svgElem.setAttribute("height", vectorData.height);
+		svgElem.setAttribute("viewBox", "0 0 " + vectorData.viewportWidth + " " + vectorData.viewportHeight);
+		// TODO tint and alpha
+
+		for (elem of vectorData.elements) {
+			var svgChild = _createSvgElement(elem);
+			if (svgChild) {
+				svgElem.appendChild(svgChild);
+			}
+		}
+
+		return svgDoc;
+	}
+
+	function _createSvgChild(childData) {
+		if (childData.type == 'group') {
+
+		} else if (childData.type == 'path') {
+
+		} else if (childData.type == 'clip-path') {
+
+		} else {
+			console.error("Unknow element type '" + childData.type + "'");
+			return false;
+		}
 	}
 
 	return {

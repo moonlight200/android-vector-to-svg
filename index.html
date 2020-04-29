@@ -6,10 +6,10 @@
 	</head>
 	<body>
 		<form>
-			<textarea id="vdIn"></textarea>
+			<textarea id="vdIn" rows="20" cols="120"></textarea>
 			<button id="vdSubmit">Submit</button>
 		</form>
-		<textarea id="svgOut"></textarea>
+		<textarea id="svgOut" rows="20" cols="120"></textarea>
 
 		<script type="text/javascript" src="converter.js"></script>
 		<script type="text/javascript">
@@ -18,7 +18,7 @@
 					event.preventDefault();
 					var vdIn = document.getElementById("vdIn").value;
 					var svgOut = Converter.convertVD2SVG(vdIn);
-					document.getElementById("svgOut").value = svgOut;
+					document.getElementById("svgOut").value = new XMLSerializer().serializeToString(svgOut);
 				});
 		</script>
 	</body>
