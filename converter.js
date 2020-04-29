@@ -92,7 +92,20 @@ var Converter = (function() {function convert(vdIn) {
 	}
 
 	function _parseVdClipPath(vdClipPath) {
-		console.log("Clip paths not implemented");
+		var clipPath = {
+			type: 'clip-path'
+		};
+
+		if ('android:pathData' in vdPath.attributes) {
+			clipPath.data = vdPath.attributes['android:pathData'].value;
+		} else {
+			throw "Missing 'android:pathData'!";
+		}
+		if ('android:name' in vdPath.attributes) {
+			clipPath.name = vdPath.attributes['android:name'].value;
+		}
+
+		return clipPath;
 	}
 
 	return {
