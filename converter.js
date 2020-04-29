@@ -1,4 +1,7 @@
-var Converter = (function() {function convert(vdIn) {
+var Converter = (function() {
+	const colorRegex = /^#(?:[0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
+
+	function convert(vdIn) {
 		var parsed = _parseVd(vdIn);
 		console.debug("parsed", parsed);
 
@@ -88,7 +91,69 @@ var Converter = (function() {function convert(vdIn) {
 	}
 
 	function _parseVdPath(vdPath) {
-		console.log("Paths not implemented");
+		var path = {
+			type: 'path'
+		};
+
+		if ('android:pathData' in vdPath.attributes) {
+			path.data = vdPath.attributes['android:pathData'].value;
+		} else {
+			throw "Missing 'android:pathData'!";
+		}
+		if ('android:name' in vdPath.attributes) {
+			path.name = vdPath.attributes['android:name'].value;
+		}
+		if ('android:fillColor' in vdPath.attributes) {
+			var color = vdPath.attributes['android:fillColor'].value;
+			if (color.match(this.colorRegex)) {
+				path.fillColor = color;
+			} else {
+				log.warn("Unknown path fill color value '" + color + "'");
+			}
+		}
+		if ('android:strokeColor' in vdPath.attributes) {
+			var color = vdPath.attributes['android:strokeColor'].value;
+			if (color.match(this.colorRegex)) {
+				path.strokeColor = color;
+			} else {
+				log.warn("Unknown path stroke color value '" + color + "'");
+			}
+		}
+		if ('android:strokeWidth' in vdPath.attributes) {
+			var w = vdPath.attributes['android:strokeWidth'].value;
+			path.strokeWidth = Number(s.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:strokeAlpha' in vdPath.attributes) {
+			var a = vdPath.attributes['android:strokeAlpha'].value;
+			path.strokeAlpha = Number(a.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:fillAlpha' in vdPath.attributes) {
+			var a = vdPath.attributes['android:fillAlpha'].value;
+			path.fillAlpha = Number(a.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:trimPathStart' in vdPath.attributes) {
+			conosle.log("'android:trimPathStart' not yet implemented");
+		}
+		if ('android:trimPathEnd' in vdPath.attributes) {
+			conosle.log("'android:trimPathEnd' not yet implemented");
+		}
+		if ('android:trimPathOffset' in vdPath.attributes) {
+			conosle.log("'android:trimPathOffset' not yet implemented");
+		}
+		if ('android:strokeLineCap' in vdPath.attributes) {
+			conosle.log("'android:strokeLineCap' not yet implemented");
+		}
+		if ('android:strokeLineJoin' in vdPath.attributes) {
+			conosle.log("'android:strokeLineJoin' not yet implemented");
+		}
+		if ('android:strokeMiterLimit' in vdPath.attributes) {
+			conosle.log("'android:strokeMiterLimit' not yet implemented");
+		}
+		if ('android:fillType' in vdPath.attributes) {
+			conosle.log("'android:fillType' not yet implemented");
+		}
+
+		return path;
 	}
 
 	function _parseVdClipPath(vdClipPath) {
