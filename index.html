@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Android Vector Drawable to SVG Converter</title>
+	</head>
+	<body>
+		<form>
+			<textarea id="vdIn"></textarea>
+			<button id="vdSubmit">Submit</button>
+		</form>
+		<textarea id="svgOut"></textarea>
+
+		<script type="text/javascript" src="converter.js"></script>
+		<script type="text/javascript">
+			document.getElementById("vdSubmit")
+				.addEventListener("click", function(event) {
+					event.preventDefault();
+					var vdIn = document.getElementById("vdIn").value;
+					var svgOut = Converter.convertVD2SVG(vdIn);
+					document.getElementById("svgOut").value = svgOut;
+				});
+		</script>
+	</body>
+</html>
