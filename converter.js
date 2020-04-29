@@ -90,7 +90,8 @@ var Converter = (function() {
 
 	function _parseVdGroup(vdGroup) {
 		var group = {
-			type: 'group'
+			type: 'group',
+			elements: []
 		};
 
 		if ('android:name' in vdGroup.attributes) {
@@ -123,6 +124,14 @@ var Converter = (function() {
 		if ('android:translateY' in vdGroup.attributes) {
 			var ty = vdGroup.attributes['android:translateY'].value;
 			group.translateY = Number(ty.replace(/[^\d.]/gi, ''));
+		}
+
+		// Parse childs
+		for (child of vdGroup.children) {
+			var parsedChild = _parseVdChild(child);
+			if (parsedChild) {
+				group.elements.push(parsedChild);
+			}
 		}
 
 		return group;
@@ -231,17 +240,59 @@ var Converter = (function() {
 		return svgDoc;
 	}
 
-	function _createSvgChild(childData) {
-		if (childData.type == 'group') {
-
-		} else if (childData.type == 'path') {
-
-		} else if (childData.type == 'clip-path') {
-
+	function _createSvgElement(elementData) {
+		if (elementData.type == 'group') {
+			return _createSvgGroup(elementData);
+		} else if (elementData.type == 'path') {
+			return _createSvgPath(elementData);
+		} else if (elementData.type == 'clip-path') {
+			return _createSvgClipPath(elementData);
 		} else {
-			console.error("Unknow element type '" + childData.type + "'");
+			console.error("Unknow element type '" + elementData.type + "'");
 			return false;
 		}
+	}
+
+	function _createSvgGroup(groupData) {
+		var svgGroup = document.createElementNS(this.svgNamespace, "g");
+
+		// TODO group elements
+
+		for (elem of groupData.elements) {
+			var svgChild = _createSvgElement(elem);
+			if (svgChild) {
+				svgGroup.appendChild(svgChild);
+			}
+		}
+
+		return svgGroup;
+	}
+
+	function _createSvgPath(pathData) {
+		var svgPath = document.createElementNS(this.svgNamespace, "path");
+		svgPath.setAttribute('d', pathData.data);
+
+		if ('name' in pathData) {
+			svgPath.setAttribute('id', pathData.name);
+		}
+		if ('fillColor' in pathData) {
+			svgPath.setAttribute('fill', pathData.fillColor);
+		}
+		if ('strokeColor' in pathData) {
+			svgPath.setAttribute('stroke', pathData.strokeColor);
+		}
+		if ('strokeWidth' in pathData) {
+			svgPath.setAttribute('stroke-width', pathData.strokeWidth);
+		}
+		if ('fillAlpha' in pathData) {
+			conosle.log("fillAlpha not implemented in svg");
+		}
+
+		return svgPath;
+	}
+
+	function _createSvgClipPath(clipPathData) {
+		// TODO
 	}
 
 	return {
