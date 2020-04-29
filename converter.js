@@ -161,13 +161,13 @@ var Converter = (function() {
 			type: 'clip-path'
 		};
 
-		if ('android:pathData' in vdPath.attributes) {
-			clipPath.data = vdPath.attributes['android:pathData'].value;
+		if ('android:pathData' in vdClipPath.attributes) {
+			clipPath.data = vdClipPath.attributes['android:pathData'].value;
 		} else {
 			throw "Missing 'android:pathData'!";
 		}
-		if ('android:name' in vdPath.attributes) {
-			clipPath.name = vdPath.attributes['android:name'].value;
+		if ('android:name' in vdClipPath.attributes) {
+			clipPath.name = vdClipPath.attributes['android:name'].value;
 		}
 
 		return clipPath;
