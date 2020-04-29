@@ -87,7 +87,43 @@ var Converter = (function() {
 	}
 
 	function _parseVdGroup(vdGroup) {
-		console.log("Groups not implemented");
+		var group = {
+			type: 'group'
+		};
+
+		if ('android:name' in vdGroup.attributes) {
+			group.name = vdGroup.attributes['android:name'].value;
+		}
+		if ('android:rotation' in vdGroup.attributes) {
+			var r = vdGroup.attributes['android:rotation'].value;
+			group.rotation = Number(r.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:pivotX' in vdGroup.attributes) {
+			var px = vdGroup.attributes['android:pivotX'].value;
+			group.pivotX = Number(px.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:pivotY' in vdGroup.attributes) {
+			var py = vdGroup.attributes['android:pivotY'].value;
+			group.pivotY = Number(py.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:scaleX' in vdGroup.attributes) {
+			var sx = vdGroup.attributes['android:scaleX'].value;
+			group.scaleX = Number(sx.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:scaleY' in vdGroup.attributes) {
+			var sy = vdGroup.attributes['android:scaleY'].value;
+			group.scaleY = Number(sy.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:translateX' in vdGroup.attributes) {
+			var tx = vdGroup.attributes['android:translateX'].value;
+			group.translateX = Number(tx.replace(/[^\d.]/gi, ''));
+		}
+		if ('android:translateY' in vdGroup.attributes) {
+			var ty = vdGroup.attributes['android:translateY'].value;
+			group.translateY = Number(ty.replace(/[^\d.]/gi, ''));
+		}
+
+		return group;
 	}
 
 	function _parseVdPath(vdPath) {
