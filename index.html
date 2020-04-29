@@ -10,15 +10,32 @@
 			<button id="vdSubmit">Submit</button>
 		</form>
 		<textarea id="svgOut" rows="20" cols="120"></textarea>
+		<div id="svgImage"></div>
 
 		<script type="text/javascript" src="converter.js"></script>
 		<script type="text/javascript">
 			document.getElementById("vdSubmit")
 				.addEventListener("click", function(event) {
 					event.preventDefault();
+
+					var svgEl = document.getElementById("svgImage");
+					var svgTextarea = document.getElementById("svgOut");
+
 					var vdIn = document.getElementById("vdIn").value;
-					var svgOut = Converter.convertVD2SVG(vdIn);
-					document.getElementById("svgOut").value = new XMLSerializer().serializeToString(svgOut);
+					
+					var svgOut = null;
+					try {
+						svgOut = Converter.convertVD2SVG(vdIn);
+						console.log(svgOut);
+					} catch(error) {
+						svgTextarea.value = error;
+						return;
+					}
+
+					var svgSerialized = new XMLSerializer().serializeToString(svgOut);
+
+					svgTextarea.value = svgSerialized;
+					svgEl.innerHTML = svgSerialized;
 				});
 		</script>
 	</body>
