@@ -51,14 +51,14 @@ var Converter = (function() {
 		}
 		if ('android:tint' in xmlVector.attributes) {
 			// TODO
-			conosle.log("'android:tint' not implemented");
+			console.log("'android:tint' not implemented");
 		}
 		if ('android:tintMode' in xmlVector.attributes) {
 			// TODO
-			conosle.log("'android:tintMode' not implemented");
+			console.log("'android:tintMode' not implemented");
 		}
 		if ('android:autoMirrored' in xmlVector.attributes) {
-			conosle.warn("Auto mirroring ('android:autoMirrored') not supported by SVG");
+			console.warn("Auto mirroring ('android:autoMirrored') not supported by SVG");
 		}
 		if ('android:alpha' in xmlVector.attributes) {
 			var a = xmlVector.attributes['android:alpha'].value;
@@ -179,25 +179,25 @@ var Converter = (function() {
 			path.fillAlpha = Number(a.replace(/[^\d.]/gi, ''));
 		}
 		if ('android:trimPathStart' in vdPath.attributes) {
-			conosle.log("'android:trimPathStart' not yet implemented");
+			console.log("'android:trimPathStart' not yet implemented");
 		}
 		if ('android:trimPathEnd' in vdPath.attributes) {
-			conosle.log("'android:trimPathEnd' not yet implemented");
+			console.log("'android:trimPathEnd' not yet implemented");
 		}
 		if ('android:trimPathOffset' in vdPath.attributes) {
-			conosle.log("'android:trimPathOffset' not yet implemented");
+			console.log("'android:trimPathOffset' not yet implemented");
 		}
 		if ('android:strokeLineCap' in vdPath.attributes) {
-			conosle.log("'android:strokeLineCap' not yet implemented");
+			console.log("'android:strokeLineCap' not yet implemented");
 		}
 		if ('android:strokeLineJoin' in vdPath.attributes) {
-			conosle.log("'android:strokeLineJoin' not yet implemented");
+			console.log("'android:strokeLineJoin' not yet implemented");
 		}
 		if ('android:strokeMiterLimit' in vdPath.attributes) {
-			conosle.log("'android:strokeMiterLimit' not yet implemented");
+			console.log("'android:strokeMiterLimit' not yet implemented");
 		}
 		if ('android:fillType' in vdPath.attributes) {
-			conosle.log("'android:fillType' not yet implemented");
+			console.log("'android:fillType' not yet implemented");
 		}
 
 		return path;
@@ -256,7 +256,35 @@ var Converter = (function() {
 	function _createSvgGroup(groupData) {
 		var svgGroup = document.createElementNS(this.svgNamespace, "g");
 
-		// TODO group elements
+		if ('name' in groupData) {
+			svgGroup.setAttribute('id', groupData.name);
+		}
+
+		var transform = "";
+		if ('translateX' in groupData || 'translateY' in groupData) {
+			transform += "translate(" +
+				(groupData.translateX || 0) +
+				" " +
+				(groupData.translateY || 0) +
+				") ";
+		}
+		if ('scaleX' in groupData || 'scaleY' in groupData) {
+			transform += "scale(" +
+				(groupData.scaleX || 1) +
+				" " +
+				(groupData.scaleY || 1) +
+				") ";
+		}
+		if ('rotation' in groupData) {
+			transform += "rotate(" + groupData.rotation;
+			if ('pivotX' in groupData || 'pivotY' in groupData) {
+				transform += " " +
+					(groupData.pivotX || 0) +
+					" " +
+					(groupData.pivotY || 0);
+			}
+			transform += ") ";
+		}
 
 		for (elem of groupData.elements) {
 			var svgChild = _createSvgElement(elem);
@@ -285,14 +313,17 @@ var Converter = (function() {
 			svgPath.setAttribute('stroke-width', pathData.strokeWidth);
 		}
 		if ('fillAlpha' in pathData) {
-			conosle.log("fillAlpha not implemented in svg");
+			svgPath.setAttribute('opacity', pathData.fillAlpha);
 		}
 
 		return svgPath;
 	}
 
 	function _createSvgClipPath(clipPathData) {
+		var svgClipPath = document.createElementNS(this.svgNamespace, "clipPath");
 		// TODO
+
+		return svgClipPath;
 	}
 
 	return {
